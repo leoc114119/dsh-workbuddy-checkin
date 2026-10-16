@@ -4,6 +4,14 @@
 
 不是 WorkBuddy 插件，是 **DSH 插件** —— 一个 npm 包，通过 Cordis 挂进 DSH 的插件树。
 
+仓库：<https://github.com/leoc114119/dsh-workbuddy-checkin>
+
+一行装：
+
+```sh
+dsh plugin --profile desktop add github:leoc114119/dsh-workbuddy-checkin
+```
+
 ---
 
 ## 它解决什么
@@ -36,10 +44,10 @@ dsh plugin --profile desktop add file:/绝对路径/dsh-workbuddy-checkin
 dsh plugin --profile desktop add dsh-workbuddy-checkin
 ```
 
-### 方式三：从 GitHub 装
+### 方式三：从 GitHub 装（已实测可用，无需 npm 账号）
 
 ```sh
-dsh plugin --profile desktop add github:<owner>/dsh-workbuddy-checkin
+dsh plugin --profile desktop add github:leoc114119/dsh-workbuddy-checkin
 ```
 
 > DSH 桌面端也可以在 **设置 → 插件** 里装，等价于上面命令。
