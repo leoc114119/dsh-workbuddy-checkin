@@ -165,6 +165,8 @@ dsh-workbuddy-checkin status --account workbuddy-desktop
 | 解密链路（keyblob 两层密钥 → 令牌 → host） | **确定** —— 本机两个账号（`workbuddy-desktop` / `workbuddy-desktop-ai`）实测解密成功，与独立 Python 实现逐字段一致 |
 | 状态查询 | **确定** —— 对两个真实账号真实请求，结果与 Python 版一致（一个 `no_activity`、一个 `already_checked_in`，连续 17 天 / 1700 积分） |
 | **DSH 挂载 + 工具调用** | **确定** —— 装进 profile 后 Cordis 成功挂载；`headless` 会话里模型确实调用了 `workbuddy_checkin`，返回上面两段真实结果（即本 README 的表格数据来源） |
+| **装进正在运行的 DSH 桌面端** | **确定** —— 宿主进程已连续运行两天、安装动作发生在其启动**之后**；在该进程内新建会话，模型成功调用 `workbuddy_checkin` 并返回同样两段真实结果 ⇒ **无需重启即已生效** |
+| 从 GitHub 直装（他人的安装路径） | **确定** —— 干净 profile 里 `dsh plugin add github:leoc114119/dsh-workbuddy-checkin` 一次成功，挂载 + 工具调用均通过 |
 | `asym-v1` 信封 | **按源码实现 + 往返验证** —— 本机没有真实 `asym-v1` 样本，构造样例验证通过 |
 | 真正领到一次积分 | **尚未** —— 本机账号当天都已签到 / 无活动，没有可领的机会 |
 | 跨机器可用 | **未验证** —— 密钥层级按通用逻辑实现（按 keyId 选钥匙），但只在开发机上跑过 |
