@@ -1,0 +1,6 @@
+# Register the WorkBuddy daily check-in tool without touching any other plugin.
+# The tool only reads the local WorkBuddy sign-in state and calls the official
+# check-in endpoint; no extra service or model provider is installed.
+- insert:
+    - id: workbuddy-checkin
+      name: dsh-workbuddy-checkin

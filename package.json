@@ -1,0 +1,39 @@
+{
+  "name": "dsh-workbuddy-checkin",
+  "version": "0.1.0",
+  "description": "WorkBuddy 每日积分签到 — DeepSeek Harness 插件：读取本机 WorkBuddy 登录态（仅在内存中解密），查询并领取每日签到积分。",
+  "type": "module",
+  "license": "MIT",
+  "author": "leochen",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "workbuddy",
+    "checkin",
+    "credits"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-workbuddy-checkin": "lib/cli.js"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
