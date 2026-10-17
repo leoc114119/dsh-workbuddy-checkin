@@ -1,6 +1,6 @@
 {
   "name": "dsh-workbuddy-checkin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "WorkBuddy 每日积分签到 — DeepSeek Harness 插件：读取本机 WorkBuddy 登录态（仅在内存中解密），查询并领取每日签到积分。",
   "type": "module",
   "license": "MIT",
@@ -13,6 +13,14 @@
     "checkin",
     "credits"
   ],
+  "homepage": "https://github.com/leoc114119/dsh-workbuddy-checkin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoc114119/dsh-workbuddy-checkin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/leoc114119/dsh-workbuddy-checkin/issues"
+  },
   "engines": {
     "node": "^22.19.0 || >=24.0.0"
   },
@@ -29,6 +37,7 @@
     "lib",
     "cordis.patch.yml",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "dsh": {

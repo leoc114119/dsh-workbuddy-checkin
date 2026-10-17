@@ -4,6 +4,8 @@
 
 不是 WorkBuddy 插件，是 **DSH 插件** —— 一个 npm 包，通过 Cordis 挂进 DSH 的插件树。
 
+当前版本 **0.1.1**（更新记录见 [CHANGELOG.md](CHANGELOG.md)）。
+
 仓库：<https://github.com/leoc114119/dsh-workbuddy-checkin>
 
 一行装：
@@ -52,6 +54,36 @@ dsh plugin --profile desktop add github:leoc114119/dsh-workbuddy-checkin
 
 > DSH 桌面端也可以在 **设置 → 插件** 里装，等价于上面命令。
 > 装完在 `~/.dsh/profiles/<profile>/package.json` 的 `dsh.profile.bundles` 里会多出 `dsh-workbuddy-checkin`。
+
+## 与 DSH 内核的兼容性
+
+**本包故意不声明 `peerDependencies`。** 这是 2026-10-17 踩出来的结论：
+
+同一天 `dsh-workbuddy-connect` 把 `@deepseek-ai/dsh-*` 的 peer **精确钉死**在当时的内核版本上
+（`0.2.0-rc.2`）。当天 DSH 连升两次内核（`0.2.0-rc.2` → `0.2.1-rc.1` → `0.2.1-rc.2`），宿主于是给它挂
+`incompatible-version`、`rows: []`，整条 provider 从运行树里消失；而**插件页不报错**，只显示
+「还没有安装任何插件」，看起来完全像插件被删了（实际文件一个没少）。
+
+本插件只用到两个稳定面：`ctx.tools.register` + `@deepseek-ai/schemastery` 的配置 schema。
+钉死版本换不来安全，只会把自己的可用性绑死在别人的发版节奏上 —— 所以这里宁可**不声明 peers**，
+把兼容性交给实测（见下表）。
+
+> 代价说清楚：不声明 peers 等于放弃构建期检查。内核若真改了 `tools` 服务或 `defineTool` 的签名，
+> 本插件不会在安装时被拦，而是**挂载时报错**（`failed to import` 或 fiber 起不来）。
+> 升级 DSH 后想确认，跑一句 `workbuddy_checkin action=accounts` 即可（离线、不联网、不改状态）。
+
+## 改完源码怎么生效
+
+`file:` 安装是**拷贝**不是链接（原因见上面「方式一」），所以改完源码必须**先卸后装**一次：
+
+| 通道 | 操作 |
+|---|---|
+| GUI | 设置 → 插件 → 本插件卡片 → 卸载，再「添加插件」填本地目录绝对路径 |
+| 脚本 | `pluginManager/removeBundle({name})` → `installBundle({spec:"file:/绝对路径/dsh-workbuddy-checkin", options:{saveExact:true, enabled:true}})` |
+| 首次安装 | `dsh plugin --profile desktop add file:/绝对路径/dsh-workbuddy-checkin` |
+
+装完核对 `~/.dsh/profiles/desktop/node_modules/dsh-workbuddy-checkin/package.json` 的 `version`
+是否等于源码里的版本；不一致就是没重装。插件页没变化按 Cmd+R 刷新（客户端是更新前的旧视图时不刷新会看不到改动）。
 
 ## 用法
 
@@ -166,6 +198,7 @@ dsh-workbuddy-checkin status --account workbuddy-desktop
 | 状态查询 | **确定** —— 对两个真实账号真实请求，结果与 Python 版一致（一个 `no_activity`、一个 `already_checked_in`，连续 17 天 / 1700 积分） |
 | **DSH 挂载 + 工具调用** | **确定** —— 装进 profile 后 Cordis 成功挂载；`headless` 会话里模型确实调用了 `workbuddy_checkin`，返回上面两段真实结果（即本 README 的表格数据来源） |
 | **装进正在运行的 DSH 桌面端** | **确定** —— 宿主进程已连续运行两天、安装动作发生在其启动**之后**；在该进程内新建会话，模型成功调用 `workbuddy_checkin` 并返回同样两段真实结果 ⇒ **无需重启即已生效** |
+| **跨内核升级后仍可用** | **确定** —— 2026-10-17 内核从 `0.2.0-rc.2` 连升到 `0.2.1-rc.2`，本插件未做任何改动即保持 `active`；`workbuddy_checkin action=status` 实跑返回 `workbuddy-desktop` 第 10 季 / 连续 18 天 / 累计 1800 积分，`workbuddy-desktop-ai` 无进行中活动按 `no_activity` 跳过 |
 | 从 GitHub 直装（他人的安装路径） | **确定** —— 干净 profile 里 `dsh plugin add github:leoc114119/dsh-workbuddy-checkin` 一次成功，挂载 + 工具调用均通过 |
 | `asym-v1` 信封 | **按源码实现 + 往返验证** —— 本机没有真实 `asym-v1` 样本，构造样例验证通过 |
 | 真正领到一次积分 | **尚未** —— 本机账号当天都已签到 / 无活动，没有可领的机会 |
